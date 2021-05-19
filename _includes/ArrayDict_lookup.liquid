@@ -1,0 +1,8 @@
+{% assign value = nil %}
+{% for k in include.keys %}
+  {% if k == include.key %}
+    {% assign value = include.values[forloop.index0] %}
+    {% break %}
+  {% endif %}
+{% endfor %}
+

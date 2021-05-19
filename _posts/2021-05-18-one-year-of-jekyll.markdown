@@ -11,3 +11,8 @@ Jekyll also offers powerful support for code snippets:
 {% endraw %}
 {% endhighlight %}
 
+{% assign mykeys = "me,you,us,them" | split: "," %}
+{% assign myvalues = "Alice,Bob,World,Mars" | split: "," %}
+{% include ArrayDict_lookup.liquid values=myvalues keys=mykeys key="us" %}
+**Hello {{ value }}**
+
