@@ -5,5 +5,4 @@ title: Random Musings About Jekyll
 layout: home
 ---
 
-If you're reading this line, it means that GitHub Pages ignores the _site directory.
 
