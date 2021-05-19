@@ -1,23 +1,14 @@
 name: Build the site
-on:
-  push:
-    branches:
-      - main
-jobs:
-  jekyll:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/cache@v2
-        id: bundler-cache
-        with:
-          path: vendor/bundle
-          key: ${{ runner.os }}-vendorbundle-${{ hashFiles('**/Gemfile.lock') }}
-      - name: Bundler setup
-         run: bundle config path vendor/bundle
-      - name: Bundle install
-         if: steps.bundler-cache.outputs.cache-hit != 'true'
-         run: bundle install --jobs 4 --retry 3
-      - name: Jekyll Build
-        run: JEKYLL_ENV=production bundle exec jekyll build
-  
+ on:
+   push:
+     branches:
+       - main
+ jobs:
+   jekyll:
+     runs-on: ubuntu-16.04
+     steps:
+         - uses: actions/checkout@v2
+         - uses: helaili/jekyll-action@v2
+           with:
+             token: ${{ secrets.BUILD_ACTION_TOKEN }}
+             target_branch: prod

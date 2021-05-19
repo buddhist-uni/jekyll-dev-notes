@@ -5,5 +5,4 @@ title: Random Musings About Jekyll
 layout: home
 ---
 
-This message in prod means the build worked!
 
