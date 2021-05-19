@@ -1,0 +1,21 @@
+name: Build the site
+on:
+  push:
+    branches:
+      - main
+jobs:
+  jekyll:
+    runs-on: ubuntu-16.04
+    steps:
+        - uses: actions/checkout@v2
+        - uses: actions/cache@v2
+          with:
+            path: vender/bundle
+            key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile') }}
+            restore-keys:  ${{ runner.os }}-gems-
+        - uses: helaili/jekyll-action@v2
+          with:
+            token: ${{ secrets.BUILD_ACTION_TOKEN }}
+            target_branch: prod
+            target_path: /
+
