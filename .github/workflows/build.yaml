@@ -6,18 +6,18 @@ on:
 jobs:
   jekyll:
     runs-on: ubuntu-latest
-    env:
-        JEKYLL_VERSION: 3.8
     steps:
-        - uses: actions/checkout@v2
-        - name: Pull Jekyll Docker Image
-          run: docker pull jekyll/jekyll:$JEKYLL_VERSION
-        - uses: actions/cache@v2
-          with:
-            path: tmp
-            key: ${{ runner.os }}-tmp-${{ hashFiles('Gemfile.lock') }}
-            restore-keys:  ${{ runner.os }}-tmp-
-        - name: Jekyll Build
-          run: |
-           docker run --rm --volume="$PWD:/srv/jekyll:delegated" --volume="$PWD/tmp:/usr/local/bundle:delegated" jekyll/jekyll:$JEKYLL_VERSION /bin/bash -c "chmod a+wx . && bundle check || bundle install && JEKYLL_ENV=production bundle exec jekyll build"
-
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        id: bundler-cache
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-vendorbundle-${{ hashFiles('**/Gemfile.lock') }}
+      - name: Bundler setup
+         run: bundle config path vendor/bundle
+      - name: Bundle install
+         if: steps.bundler-cache.outputs.cache-hit != 'true'
+         run: bundle install --jobs 4 --retry 3
+      - name: Jekyll Build
+        run: JEKYLL_ENV=production bundle exec jekyll build
+  
