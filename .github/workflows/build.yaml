@@ -19,9 +19,5 @@ jobs:
             restore-keys:  ${{ runner.os }}-tmp-
         - name: Jekyll Build
           run: |
-           docker run --rm 
-            --volume="$PWD:/srv/jekyll:delegated" 
-            --volume="$PWD/tmp:/usr/local/bundle:delegated" 
-            jekyll/jekyll:$JEKYLL_VERSION /bin/bash 
-              -c "chmod a+wx . && bundle check || bundle install && JEKYLL_ENV=production bundle exec jekyll build"
+           docker run --rm --volume="$PWD:/srv/jekyll:delegated" --volume="$PWD/tmp:/usr/local/bundle:delegated" jekyll/jekyll:$JEKYLL_VERSION /bin/bash -c "chmod a+wx . && bundle check || bundle install && JEKYLL_ENV=production bundle exec jekyll build"
 
