@@ -5,17 +5,23 @@ on:
       - main
 jobs:
   jekyll:
-    runs-on: ubuntu-16.04
+    runs-on: ubuntu-latest
+    env:
+        JEKYLL_VERSION: 3.8
     steps:
         - uses: actions/checkout@v2
+        - name: Pull Jekyll Docker Image
+          run: docker pull jekyll/jekyll:$JEKYLL_VERSION
         - uses: actions/cache@v2
           with:
-            path: vender/bundle
-            key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile') }}
-            restore-keys:  ${{ runner.os }}-gems-
-        - uses: helaili/jekyll-action@v2
-          with:
-            token: ${{ secrets.BUILD_ACTION_TOKEN }}
-            target_branch: prod
-            target_path: /
+            path: tmp
+            key: ${{ runner.os }}-tmp-${{ hashFiles('Gemfile.lock') }}
+            restore-keys:  ${{ runner.os }}-tmp-
+        - name: Jekyll Build
+          run: |
+           docker run --rm 
+            --volume="$PWD:/srv/jekyll:delegated" 
+            --volume="$PWD/tmp:/usr/local/bundle:delegated" 
+            jekyll/jekyll:$JEKYLL_VERSION /bin/bash 
+              -c "chmod a+wx . && bundle check || bundle install && JEKYLL_ENV=production bundle exec jekyll build"
 
