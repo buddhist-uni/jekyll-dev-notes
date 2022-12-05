@@ -8,6 +8,9 @@ jobs:
      runs-on: ubuntu-latest
      steps:
          - uses: actions/checkout@v2
+         - uses: buddhist-uni/normalized-unicode-action@main
+           with:
+             check_all: true
          - uses: actions/cache@v2
            with:
              path: ${{ github.workspace }}/vendor

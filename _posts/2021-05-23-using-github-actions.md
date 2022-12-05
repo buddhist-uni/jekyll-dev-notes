@@ -9,4 +9,5 @@ huge_file: "https://archive.org/download/PaliMonasticTerms/Pali%20Monastic%20Ter
 
 This is an [example](https://www.example.com/fake) of a [page](https://jekyllrb.com/docs/pages/) with [fake](https://archive.org/details/thisdoesntexist) and [real](https://open.tube/videos/watch/9c1df408-1f47-4405-a9ad-34ed3c2b972a) links in the body and frontmatter.
 
+Here is some bad unicode: `"Ç" !== "Ç"`
 

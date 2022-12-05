@@ -1,8 +1,5 @@
 name: Build the site
-on:
-  push:
-     branches:
-       - main
+on: ['workflow_dispatch']
 jobs:
    urlsup:
      runs-on: ubuntu-latest
