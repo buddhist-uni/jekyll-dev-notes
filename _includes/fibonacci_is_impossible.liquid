@@ -1,0 +1,13 @@
+{% if include.n <= 1 %}
+  {% assign value = include.n | plus: 0 %}
+{% else %}
+  {% assign ret = '' | split: '' %}
+  {% assign n = include.n | minus: 2 %}
+  {% include fibonacci.liquid n=n %}
+  {% assign ret = ret | push: value %}
+  {% assign n = include.n | minus: 1 %}
+  {% include fibonacci.liquid n=n %}
+  {% assign ret = ret | push: value %}
+  {{ ret }}
+  {% assign value = ret[1] | plus: ret[0] %}
+{% endif %}

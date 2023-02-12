@@ -5,5 +5,5 @@ title: Random Musings About Jekyll
 layout: home
 ---
 
-and [GitHub Pages](https://docs.github.com/en/pages)
+Along with some thoughts on using Jekyll on [GitHub Pages](https://docs.github.com/en/pages)
 
