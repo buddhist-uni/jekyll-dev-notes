@@ -4,20 +4,43 @@ on:
      branches:
        - main
 jobs:
-   Jekyll:
-     runs-on: ubuntu-latest
-     steps:
-         - uses: actions/checkout@v2
-         - uses: buddhist-uni/normalized-unicode-action@main
-           with:
-             check_all: true
-         - uses: actions/cache@v2
-           with:
-             path: ${{ github.workspace }}/vendor
-             key: ${{ runner.os }}-vendor-${{ hashFiles('**/Gemfile.lock') }}
-             restore-keys: |
-               ${{ runner.os }}-vendor-
-         - uses: helaili/jekyll-action@2.2
-           with:
-             token: ${{ secrets.BUILD_ACTION_TOKEN }}
-             target_branch: prod
+  Build:
+    runs-on: ubuntu-latest
+    env:
+        BUILD_DIR: /home/runner/work/jekyll-dev-notes/jekyll_build
+    steps:
+      - name: Checkout the Code
+        uses: actions/checkout@v3
+      - name: Normalize Unicode in the Previous Commit
+        uses: buddhist-uni/normalized-unicode-action@main
+        with:
+          check_all: true
+      - name: Install build requirements
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.2
+          bundler-cache: true
+      - name: Build the site
+        run: |
+          mkdir $BUILD_DIR
+          export RUBYOPT="--enable=yjit"
+          ruby --version
+          JEKYLL_ENV=production bundle exec jekyll build -d $BUILD_DIR --trace
+      - name: Upload Build as Artifact
+        uses: actions/upload-pages-artifact@main
+        with:
+          path: ${{ env.BUILD_DIR }}
+          retention-days: 62
+  Deploy:
+    runs-on: ubuntu-latest
+    needs: Build
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy the Artifact to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@main
