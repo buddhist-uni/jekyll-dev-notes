@@ -85,20 +85,47 @@ My test:
 
 > My test: Passes!
 
+### Using Liquid to generate non-html files
+
+I usually will make a null layout file for this case:
+
+`_layouts/nil.html`:
+{% highlight liquid %}{% raw %}
+{{ content }}
+{% endraw %}{% endhighlight %}
+
+Then, in whatever file you want Jekyll to process, just add the null layout:
+
+`create-dynamic-bash-file.html`:
+{% highlight liquid %}{% raw %}
+---
+layout: nil
+permalink: my-script.bash
+---
+# prints all the page paths to stdout
+{% for page in site.pages %}
+echo "{{ page.path }}"
+{% endfor %}
+{% endraw %}{% endhighlight %}
+
+Note that the template ends in `.html` so that Jekyll knows not to `markdownify` it.
+It will be renamed to `my-script.bash` in the output directory.
+This will always work, even to generate a markdown file, and it makes it clear that the source file is not (yet) a real e.g. bash script.
+
 ### Strip your includes
 
-When you call `{% raw %}{% include something.md %}{% endraw %}`, newlines will be automatically added to your include---even if they aren't in the original file!
+When you call `{% raw %}{% include something.md %}{% endraw %}`, newlines will be automatically added---even if they aren't in the original file!
 Since this breaks certain markdown patterns, you may want to have a `strip`ped include.
 
 You could could `capture` the output, then call `{% raw %}{{ captured_output | strip }}{% endraw %}` but this is cumbersome and ugly for the caller.
-To make the include self-stripping, just make sure to put some whitespace-erasing {% raw %} `{%-`{% endraw %}s at the beginning and end of the include:
+To make the include self-stripping, just make sure to put a whitespace-erasing {% raw %}`{%- -%}`{% endraw %}s at the ends of the include:
 
 `_includes/inline_bold.md`:
 
 {% highlight liquid %}{% raw %}
 {%- comment -%}This include can safely be used in an inline manner{%- endcomment -%}
 **{{ include.text }}**
-{%- comment -%}Just make sure the include ends in a %- comment like this one!{%- endcomment -%}
+{%- comment -%}Just make sure the include ends in a %- comment -% like this one!{%- endcomment -%}
 {% endraw %}{% endhighlight %}
 
 `_somewhere/else.md`:
