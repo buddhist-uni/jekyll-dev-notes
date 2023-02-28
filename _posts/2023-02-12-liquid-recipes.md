@@ -28,6 +28,20 @@ It assumes you're already familliar with the fundamentals of writing [Liquid in 
 
 ## The Recipes: How to...
 
+### Comment out some broken code
+
+The `comment` tag in Liquid unfortunately will parse and process the inner `content` block 😮‍💨
+
+In order to temporarily comment out broken Liquid code, you need to double wrap it first in `raw` and *then* in `comment` to ensure Liquid doesn't try to parse the code inside the comment:
+
+<code>
+&lcub;% comment %&rcub;&lcub;% raw %&rcub;
+&lcub;% broked
+&lcub;% endraw %&rcub;&lcub;% endcomment %&rcub;
+</code>
+
+Just beware of any <code>&lcub;% endraw %&rcub;</code>s inside the comment!
+
 ###  Make a literal string list
 
 You cannot directly instantiate a list in liquid.
@@ -212,7 +226,8 @@ For example, this `_include` takes a list of lists and outputs them as nested ma
 `_includes/recursive_lists.md`:
 
 {% highlight liquid %}{% raw %}
-{% for item in include.list %}{% if item[0] %}{{ include.prefix }}Sublist:
+{% for item in include.list -%}
+{%- if item[0] %}{{ include.prefix }}Sublist:
 {% assign p = '  ' | append: include.prefix %}{% include recursive_lists.md list=item prefix=p %}{% else %}{{ include.prefix }}{{ item }}
 {% endif %}{%- endfor -%}
 {% endraw %}{% endhighlight %}

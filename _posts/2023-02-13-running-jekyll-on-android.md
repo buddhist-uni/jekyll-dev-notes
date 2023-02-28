@@ -13,14 +13,15 @@ To run a Jekyll build (or even serve!) on Termux, I just needed to do a couple t
 
 1. `pkg install ruby`
 2. `gem install bundler`
-3. Add the following two lines to your `Gemfile`:
+3. Add the following line to your `Gemfile`:
 
 {% highlight rb %}
-gem "jekyll-sass-converter", ">= 2.0", "< 3.0"
 gem "webrick", "~> 1.7"
 {% endhighlight %}
 
-The first locks jekyll-sass-converter to v2 (as v3 uses Dart, which I haven't yet gotten to work on Android) and the second line explicitly asks for a hidden dependency.
+This line explicitly asks for a hidden dependency.
 
 And that's it!
+Just `bundle install` and `bundle exec jekyll serve` as you normally would.
+
 Happy Jekylling on-the-go!
